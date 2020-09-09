@@ -1,0 +1,12 @@
+.input-content {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.search-input {
+    border: 0;
+    border-bottom: 2px solid;
+    min-width: 296px;
+    font-size: 20px;
+}
