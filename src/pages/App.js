@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch } from 'react-router';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import rootReducer from '../reducers/rootReducer';
+import rootReducer from '../modules/rootReducer';
 import Youtube from './Youtube';
 import GoogleMap from './GoogleMap';
 import './App.css';

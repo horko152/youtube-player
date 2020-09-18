@@ -1,43 +1,51 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import Input from '../../../Input';
-import {useSelector, useDispatch} from 'react-redux'; 
-import youtube from '../../../../services/api';
+import {useSelector, useDispatch} from 'react-redux';
+import {get} from 'lodash';
+import youtube from '../../../../modules/video/api';
+import {setListOfVideos, setInputValue, setCurrentVideo} from '../../../../modules/video/actions';
 import './index.css';
 
 const SearchBar = () => {
 
-    const inputValue = useSelector(state => state.input);
+    const inputValue = useSelector(state => state.video.inputValue);
+    const listOfVideos = useSelector(state => state.video.listOfVideos);
     const dispatch = useDispatch();
 
-    const gettingData = (text) => {
+    const gettingData = () => {
        youtube.get("search",{
             params: {
                 part: "snippet",
                 maxResults: 10,
-                key: 'key',
-                q: inputValue.text,
+                key: '',
+                q: inputValue,
             }
         })
         .then((result) => {
             console.log(result.data.items);
             if(result?.data?.items)
             {
-                dispatch({type: 'CHANGE_LIST_OF_VIDEOS', payload: result.data.items});
-                dispatch({type: 'CHANGE_CURRENT_VIDEO', payload: result.data.items[0]});
+                const videos = get(result, 'data.items', []);
+                dispatch(setListOfVideos(videos));
+                dispatch(setCurrentVideo(videos[0]));
+                console.log(inputValue);
+                console.log(listOfVideos);
             }
         });
     }
 
-    // useEffect(() => {
-    //     console.log("Some text");
-    // },[inputValue.text])
+    const onKeyPressEnter = e => {
+        if(e.key === 'Enter') {
+            gettingData();
+        }
+    }
 
     return(
         <div className="searchbar">
             <Input
-                value={inputValue.text}
-                onChange={value => dispatch({type: 'CHANGE_VALUE', payload: value})}
-                // onKeyPress
+                value={inputValue}
+                onChange={value => dispatch(setInputValue(value))}
+                onKeyPress={onKeyPressEnter}
             />
         </div>
     );
