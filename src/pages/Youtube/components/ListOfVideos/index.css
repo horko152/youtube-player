@@ -1,0 +1,8 @@
+.listofvideos{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    padding-left: 10px;
+    overflow: overlay;
+    overflow-x: hidden;
+}

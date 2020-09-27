@@ -1,0 +1,9 @@
+.login{
+    position: absolute;
+    display: flex;
+    margin-top: 15px;
+    right: 10%;
+}
+.login > button {
+    margin-right: 10px;
+}

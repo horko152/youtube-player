@@ -1,0 +1,6 @@
+.youtube-player{
+    width: 65%;
+}
+.youtube-player > .player{
+    display: initial;
+}

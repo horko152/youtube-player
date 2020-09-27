@@ -1,38 +1,54 @@
-import React, {useEffect} from 'react';
+import React, {useState,useEffect} from 'react';
 import Input from '../../../Input';
 import {useSelector, useDispatch} from 'react-redux';
-import {get} from 'lodash';
+import {get, debounce, result} from 'lodash';
 import youtube from '../../../../modules/video/api';
-import {setListOfVideos, setInputValue, setCurrentVideo} from '../../../../modules/video/actions';
+import {setListOfVideos, setCurrentVideo} from '../../../../modules/video/actions';
+import AsyncSelect from 'react-select/async';
 import './index.css';
 
 const SearchBar = () => {
 
-    const inputValue = useSelector(state => state.video.inputValue);
-    const listOfVideos = useSelector(state => state.video.listOfVideos);
+    const [inputValue, setInputValue] = useState();
+    // const [selectValue, setSelectValue] = useState();
+    const [listOfTitles, setListOfTitles] = useState([]);
     const dispatch = useDispatch();
 
-    const gettingData = () => {
-       youtube.get("search",{
+    async function gettingData() {
+        await youtube.get("search",{
             params: {
                 part: "snippet",
-                maxResults: 10,
+                maxResults: 5,
                 key: '',
                 q: inputValue,
             }
         })
         .then((result) => {
-            console.log(result.data.items);
-            if(result?.data?.items)
+            const videos = get(result, 'data.items', []);
+            if(videos)
             {
-                const videos = get(result, 'data.items', []);
                 dispatch(setListOfVideos(videos));
                 dispatch(setCurrentVideo(videos[0]));
+                setListOfTitles(videos?.map(item => {
+                    return Object.assign({}, {
+                        value: item.id.videoId,
+                        label: item.snippet.title
+                    });
+                }))
                 console.log(inputValue);
-                console.log(listOfVideos);
+                console.log(listOfTitles);
+                // console.log(listOfVideos);
+                // console.log(currentVideo);
             }
         });
     }
+
+    // const debounceMethod = debounce(gettingData,2000);
+
+    // useEffect(()=>{
+    //     console.log("Some text");
+    //     debounceMethod();
+    // },[inputValue])
 
     const onKeyPressEnter = e => {
         if(e.key === 'Enter') {
@@ -40,11 +56,22 @@ const SearchBar = () => {
         }
     }
 
+    const onKeyDownEnter = e => {
+        if(e.keyCode === 13) {
+            gettingData(inputValue);
+        }
+    }
+
     return(
         <div className="searchbar">
+            {/* <AsyncSelect
+                loadOptions={debounceMethod}
+                onInputChange={value => setInputValue(value)}
+                value={inputValue}
+            /> */}
             <Input
                 value={inputValue}
-                onChange={value => dispatch(setInputValue(value))}
+                onChange={value => setInputValue(value)}
                 onKeyPress={onKeyPressEnter}
             />
         </div>

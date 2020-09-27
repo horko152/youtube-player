@@ -1,13 +1,18 @@
 import React from 'react';
-import { Grid } from '@material-ui/core';
 import './index.css';
+import Video from './Video';
+import { useSelector } from 'react-redux';
 
 const ListOfVideos = () => {
 
+    const listOfVideos = useSelector(state => state.video.listOfVideos);
+
     return(
-        <Grid item xs={4}>
-            ListOfVideos
-        </Grid>
+        <div className="listofvideos">
+            {listOfVideos?.map(video => {
+                return <Video video={video}/>;
+            })}
+        </div>
     );
 }
 

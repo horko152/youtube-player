@@ -1,0 +1,9 @@
+.content{
+    height: 100vh;
+}
+.content-main{
+    display: flex;
+    justify-content: space-around;
+    padding-top: 30px;
+    height: 80%;
+}

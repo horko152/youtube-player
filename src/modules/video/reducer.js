@@ -1,11 +1,9 @@
 import { 
-    CHANGE_INPUT_VALUE, 
     CHANGE_LIST_OF_VIDEOS, 
     CHANGE_CURRENT_VIDEO 
 } from './types';
 
 const initialState = { 
-    inputValue: '',
     isLoading: true,
     listOfVideos: [],
     currentVideo: {}
@@ -13,11 +11,6 @@ const initialState = {
 
 const videoReducer = (state = initialState, action) => {
     switch (action.type) {
-        case CHANGE_INPUT_VALUE: 
-        return{
-            ...state,
-            inputValue:action.payload
-        }
         case CHANGE_LIST_OF_VIDEOS: 
         return{
             ...state,
