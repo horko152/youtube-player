@@ -14,7 +14,7 @@ const SearchBar = () => {
     const [listOfTitles, setListOfTitles] = useState([]);
     const dispatch = useDispatch();
 
-    async function gettingData() {
+    const gettingData = () => {
         await youtube.get("search",{
             params: {
                 part: "snippet",
