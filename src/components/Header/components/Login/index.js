@@ -1,50 +1,53 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import './index.css';
 
-const clientId = ''; 
+const clientId = process.env.REACT_APP_CLIENT_ID;
 
 const Login = () => {
+    const [user,setUser] = useState({});
 
-    const [isLogged, setIsLogged] = useState(false);
-    const [accessToken, setAccessToken] = useState();
-    const [user, setUser] = useState();
+    useEffect(()=>{
+        const getAuthToken = localStorage.getItem('auth_token');
+        if(getAuthToken) {
+          const user = localStorage.getItem('google_user');
+          setUser(JSON.parse(user));
+        }
+      },[]);
 
     const logIn = async (response) => {
-       const profile = await response.getBasicProfile(); 
-       if(response.accessToken){
-            setIsLogged(true);
-            setAccessToken(response.accessToken);
-            
-        }
-        setUser(profile.getName());
-        console.log(profile.getName());
-        console.log(user);
+       const profile = await response.profileObj;
+       if(response?.accessToken){
+            localStorage.setItem('auth_token', response.accessToken);
+            localStorage.setItem('google_user', JSON.stringify(profile));
+            setUser(profile);
+       }
     }
-    
-    const logOut = (response) => {
-        setIsLogged(false);
-        setAccessToken('');
+
+    const logOut = () => {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('google_user');
+      setUser({});
     }
-    
-    const loginFailure = (response) => {
+
+    const loginFailure = () => {
         alert('Failed to log in');
     }
-    
-    const logoutFailure = (response) => {
+
+    const logoutFailure = () => {
         alert('Failed to log out');
     }
-    
 
+    console.log('user', user?.name);
     return(
         <div className="login">
-            { isLogged ?
+            { user?.name ?
             <GoogleLogout
                 clientId={ clientId }
-                buttonText={ `Logout` }
+                buttonText={ Logout }
                 onLogoutSuccess={ logOut }
                 onFailure={ logoutFailure }
-            /> : 
+            /> :
             <GoogleLogin
                 clientId={ clientId }
                 buttonText='Login'
