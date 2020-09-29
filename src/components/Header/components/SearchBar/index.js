@@ -12,7 +12,6 @@ let debounceMethod = null;
 const SearchBar = () => {
 
   const [ inputValue, setInputValue ] = useState('');
-  // const [selectValue, setSelectValue] = useState();
   const [ listOfTitles, setListOfTitles ] = useState([]);
   const dispatch = useDispatch();
 
@@ -52,9 +51,6 @@ const SearchBar = () => {
     if (e.key === 'Enter') {
       gettingData();
     }
-  }
-
-  const onKeyDownEnter = e => {
     if (e.keyCode === 13) {
       gettingData(inputValue);
     }

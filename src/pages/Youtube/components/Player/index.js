@@ -1,29 +1,31 @@
 import React, {useState, useEffect} from 'react';
-import './index.css';
 import { useSelector } from 'react-redux';
+import Youtube from 'react-youtube';
+import './index.css';
 
 const Player = () => {
 
     const currentVideo = useSelector(state => state.video.currentVideo);
-    const [videoSrc, setVideoSrc] = useState();
 
-    useEffect(() => {
-            console.log(currentVideo);
-            if(currentVideo?.id?.videoId)
-            {
-                setVideoSrc(`https://www.youtube.com/embed/${currentVideo.id.videoId}`);
-            }
-        },[currentVideo])
+    const opts = {
+        height: '480',
+        width: '720',
+        playerVars: {
+            autoplay: 1
+        }
+    };
+
+    const onReadyMethod = (event) => {
+        event.target.pauseVideo();
+    }
 
     return(
         <div className="youtube-player">
             <div className="player">
-            <iframe
-                frameBorder="0"
-                height="100%"
-                width="100%"
-                title="Video Player"
-                src={videoSrc}
+            <Youtube
+                videoId={currentVideo?.id?.videoId}
+                opts={opts}
+                onReady={onReadyMethod}
             />
             </div>
         </div>
