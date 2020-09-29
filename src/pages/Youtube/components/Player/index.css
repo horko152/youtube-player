@@ -1,6 +1,7 @@
 .youtube-player{
     width: 65%;
 }
-.youtube-player > .player{
-    display: initial;
+.youtube-player > .player {
+    display: flex;
+    justify-content: center;
 }

@@ -44,7 +44,7 @@ const Login = () => {
             { user?.name ?
             <GoogleLogout
                 clientId={ clientId }
-                buttonText={ Logout }
+                buttonText= 'Logout' 
                 onLogoutSuccess={ logOut }
                 onFailure={ logoutFailure }
             /> :
