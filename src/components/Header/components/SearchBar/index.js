@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { get, debounce, result } from 'lodash';
 import youtube from '../../../../modules/video/api';
 import { setListOfVideos, setCurrentVideo } from '../../../../modules/video/actions';
+import Select from 'react-select'; 
 import AsyncSelect from 'react-select/async';
 import './index.css';
 
@@ -15,11 +16,11 @@ const SearchBar = () => {
   const [ listOfTitles, setListOfTitles ] = useState([]);
   const dispatch = useDispatch();
 
-  const gettingData = (inputValue) => {
-    youtube.get("search", {
+  const gettingData = async (inputValue) => {
+    await youtube.get("search", {
       params: {
         part: "snippet",
-        maxResults: 5,
+        maxResults: 7,
         key: `${process.env.REACT_APP_CLIENT_KEY}`,
         q: inputValue,
       }
@@ -51,23 +52,32 @@ const SearchBar = () => {
     if (e.key === 'Enter') {
       gettingData();
     }
-    if (e.keyCode === 13) {
+    else if (e.keyCode === 13) {
       gettingData(inputValue);
     }
   }
 
   return (
     <div className="searchbar">
+      <Select
+        options={listOfTitles}
+        onInputChange={value => setInputValue(value)}
+        isOptionSelected={value => setInputValue(value)}
+        onKeyDown={onKeyPressEnter}
+        // defaultMenuIsOpen={false}
+        closeMenuOnSelect={true}
+      />
       {/* <AsyncSelect
-                loadOptions={debounceMethod}
+                loadOptions={listOfTitles}
                 onInputChange={value => setInputValue(value)}
                 value={inputValue}
+                onKeyDown={onKeyPressEnter}
             /> */}
-      <Input
+      {/* <Input
         value={inputValue}
         onChange={value => setInputValue(value)}
         onKeyPress={onKeyPressEnter}
-      />
+      /> */}
     </div>
   );
 }
